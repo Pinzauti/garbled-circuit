@@ -19,9 +19,9 @@ class Receiver(Bob):
     TODO
     """
 
-    def __init__(self, data):
+    def __init__(self, data_receiver):
         super().__init__()
-        self.data = read_input(data)
+        self.data_receiver = read_input(data_receiver)
 
     def send_evaluation(self, entry):
         """
@@ -32,9 +32,9 @@ class Receiver(Bob):
         b_wires = circuit.get("bob", [])
 
         print(f"Received {circuit['id']}")
-        print(self.data)
-        print(sum(self.data))
-        bits_b = list(f"{sum(self.data):b}".zfill(8))
+        print(self.data_receiver)
+        print(sum(self.data_receiver))
+        bits_b = list(f"{sum(self.data_receiver):b}".zfill(8))
         bits_b = [int(i) for i in bits_b]
         print(bits_b)
 
@@ -48,10 +48,53 @@ class Receiver(Bob):
 
 
 class Sender(Alice):
-    def __init__(self, input_sender, input_receiver, circuits):
+    """
+    TODO
+    """
+
+    def __init__(self, data_sender, data_receiver, circuits):
         super().__init__(circuits)
-        self.input_sender = input_sender
-        self.input_receiver = input_receiver
+        self.data_sender = read_input(data_sender)
+        self.data_receiver = read_input(data_receiver)
+
+    def print(self, entry):
+        """
+        TODO
+        """
+        circuit, pbits, keys = entry["circuit"], entry["pbits"], entry["keys"]
+        outputs = circuit["out"]
+        a_wires = circuit.get("alice", [])  # Alice's wires
+        a_inputs = {}  # map from Alice's wires to (key, encr_bit) inputs
+        b_wires = circuit.get("bob", [])  # Bob's wires
+        b_keys = {  # map from Bob's wires to a pair (key, encr_bit)
+            w: self._get_encr_bits(pbits[w], key0, key1)
+            for w, (key0, key1) in keys.items() if w in b_wires
+        }
+
+        print(f"======== {circuit['id']} ========")
+
+        bits_a = list(f"{sum(self.data_sender):b}".zfill(8))
+        bits_a = [int(i) for i in bits_a]
+
+        bits = format(sum(self.data_sender), 'b').zfill(len(a_wires))
+
+        # Map Alice's wires to (key, encr_bit)
+        for i in range(len(a_wires)):
+            a_inputs[a_wires[i]] = (keys[a_wires[i]][bits_a[i]],
+                                    pbits[a_wires[i]] ^ bits_a[i])
+
+        # Send Alice's encrypted inputs and keys to Bob
+        result = self.ot.get_result(a_inputs, b_keys)
+
+        # Format output
+        str_bits_a = ' '.join(bits[:len(a_wires)])
+        str_bits_b = ' '.join(bits[len(a_wires):])
+        str_result = ' '.join([str(result[w]) for w in outputs])
+
+        print(f"  Alice{a_wires} = {str_bits_a} "
+              f"Bob{b_wires} = {str_bits_b}  "
+              f"Outputs{outputs} = {str_result}")
+        print()
 
 
 
