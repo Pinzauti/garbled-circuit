@@ -10,10 +10,10 @@ clean:
 	rm -rf __pycache__
 
 alice:
-	${ALICE} -c circuit/add.json
+	${ALICE}
 
 bob:
 	${BOB}
 
 local:
-	${LOCAL} -c circuit/add.json
+	${LOCAL}
