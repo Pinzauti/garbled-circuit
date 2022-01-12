@@ -1,2 +1,2 @@
 [MASTER]
-ignore-paths = ^src/yao/.*$
+ignore-paths = ^src/.*$
