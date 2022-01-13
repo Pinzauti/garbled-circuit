@@ -1,34 +1,12 @@
 """
-Francesco Pinzauti
+TODO
 """
 import argparse
 from yao.garbler import Alice, Bob, LocalTest
+from utils import read_input, verify_output
 
 ALICE_DATA_PATH = 'input/alice.txt'
 BOB_DATA_PATH = 'input/bob.txt'
-
-
-def read_input(path):
-    """
-    TODO
-    """
-    with open(path, "r", encoding="utf-8") as file:
-        input_data = list(map(int, file.readline().split()))
-    if sum(input_data) > 255:
-        raise Exception('The sum can not exceed the maximum value stored in 8 bit.')
-    return input_data
-
-
-def verify_output(result):
-    """
-    TODO
-    """
-    sender_data = read_input(ALICE_DATA_PATH)
-    receiver_data = read_input(BOB_DATA_PATH)
-    if (sum(sender_data) + sum(receiver_data)) == result:
-        print(f'The sum is correct and it is {result}.')
-    else:
-        print(f'The sum is {result} and it is incorrect.')
 
 
 class Receiver(Bob):
@@ -93,7 +71,7 @@ class Sender(Alice):
         result = self.ot.get_result(a_inputs, b_keys)
         str_result = ''.join([str(result[w]) for w in outputs])
         print(f'The sum of Alice is {sum(self.data_alice)}')
-        verify_output(int(str_result, 2))
+        verify_output(int(str_result, 2), ALICE_DATA_PATH, BOB_DATA_PATH)
 
 
 def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
