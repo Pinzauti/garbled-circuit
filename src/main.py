@@ -90,16 +90,11 @@ class Sender(Alice):
               f' and it is {int(str_result, 2)}')
 
 
-def main(
-        party,
-        circuit_path='circuit/add.json',
-        print_mode='circuit',
-        loglevel=logging.WARNING,
-):
+def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
     """
     TODO
     """
-    logging.getLogger().setLevel(loglevel)
+    logging.getLogger().setLevel(logging.WARNING)
     if party == 'alice':
         alice = Sender("input/alice.txt", "input/bob.txt", circuit_path)
         alice.start()
