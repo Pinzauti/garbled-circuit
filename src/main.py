@@ -36,9 +36,9 @@ class Receiver(Bob):
     TODO
     """
 
-    def __init__(self, data_bob):
+    def __init__(self):
         super().__init__()
-        self.data_bob = read_input(data_bob)
+        self.data_bob = read_input(BOB_DATA_PATH)
 
     def send_evaluation(self, entry):
         """
@@ -67,9 +67,9 @@ class Sender(Alice):
     TODO
     """
 
-    def __init__(self, data_alice, circuits):
+    def __init__(self, circuits):
         super().__init__(circuits)
-        self.data_alice = read_input(data_alice)
+        self.data_alice = read_input(ALICE_DATA_PATH)
 
     def print(self, entry):
         """
@@ -101,9 +101,9 @@ def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
     TODO
     """
     if party == 'alice':
-        Sender(ALICE_DATA_PATH, circuit_path).start()
+        Sender(circuit_path).start()
     elif party == 'bob':
-        Receiver(BOB_DATA_PATH).listen()
+        Receiver().listen()
     elif party == "local":
         LocalTest(circuit_path, print_mode=print_mode).start()
 
