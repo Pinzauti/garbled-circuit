@@ -2,7 +2,10 @@
 Francesco Pinzauti
 """
 import argparse
-from yao.garbler import Alice, Bob, LocalTest, logging
+from yao.garbler import Alice, Bob, LocalTest
+
+ALICE_DATA_PATH = 'input/alice.txt'
+BOB_DATA_PATH = 'input/bob.txt'
 
 
 def read_input(path):
@@ -16,12 +19,13 @@ def read_input(path):
     return input_data
 
 
-def verify_output(sender_data, result):
+def verify_output(result):
     """
     TODO
     """
-    receiver_data = read_input('input/bob.txt')
-    if (int(sender_data) + int(sum(receiver_data))) == result:
+    sender_data = read_input(ALICE_DATA_PATH)
+    receiver_data = read_input(BOB_DATA_PATH)
+    if (sum(sender_data) + sum(receiver_data)) == result:
         print(f'The sum is correct and it is {result}.')
     else:
         print(f'The sum is {result} and it is incorrect.')
@@ -32,9 +36,9 @@ class Receiver(Bob):
     TODO
     """
 
-    def __init__(self, data_receiver):
+    def __init__(self, data_bob):
         super().__init__()
-        self.data_receiver = read_input(data_receiver)
+        self.data_bob = read_input(data_bob)
 
     def send_evaluation(self, entry):
         """
@@ -45,8 +49,8 @@ class Receiver(Bob):
         b_wires = circuit.get("bob", [])
 
         print(f"Received {circuit['id']}")
-        print(f'The sum of Bob is {sum(self.data_receiver)}')
-        bits_b = list(f"{sum(self.data_receiver):b}".zfill(8))
+        print(f'The sum of Bob is {sum(self.data_bob)}')
+        bits_b = list(f"{sum(self.data_bob):b}".zfill(8))
         bits_b = [int(i) for i in bits_b]
 
         b_inputs_clear = {
@@ -63,9 +67,9 @@ class Sender(Alice):
     TODO
     """
 
-    def __init__(self, data_sender, circuits):
+    def __init__(self, data_alice, circuits):
         super().__init__(circuits)
-        self.data_sender = read_input(data_sender)
+        self.data_alice = read_input(data_alice)
 
     def print(self, entry):
         """
@@ -81,15 +85,15 @@ class Sender(Alice):
             for w, (key0, key1) in keys.items() if w in b_wires
         }
         print(f"======== {circuit['id']} ========")
-        bits_a = list(f"{sum(self.data_sender):b}".zfill(8))
+        bits_a = list(f"{sum(self.data_alice):b}".zfill(8))
         bits_a = [int(i) for i in bits_a]
         for i, _ in enumerate(a_wires):
             a_inputs[a_wires[i]] = (keys[a_wires[i]][bits_a[i]],
                                     pbits[a_wires[i]] ^ bits_a[i])
         result = self.ot.get_result(a_inputs, b_keys)
         str_result = ''.join([str(result[w]) for w in outputs])
-        print(f'The sum of Alice is {sum(self.data_sender)}')
-        verify_output(sum(self.data_sender), int(str_result, 2))
+        print(f'The sum of Alice is {sum(self.data_alice)}')
+        verify_output(int(str_result, 2))
 
 
 def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
@@ -97,9 +101,9 @@ def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
     TODO
     """
     if party == 'alice':
-        Sender("input/alice.txt", circuit_path).start()
+        Sender(ALICE_DATA_PATH, circuit_path).start()
     elif party == 'bob':
-        Receiver('input/bob.txt').listen()
+        Receiver(BOB_DATA_PATH).listen()
     elif party == "local":
         LocalTest(circuit_path, print_mode=print_mode).start()
 
