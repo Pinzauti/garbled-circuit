@@ -2,6 +2,9 @@
 TODO
 """
 
+ALICE_DATA_PATH = 'input/alice.txt'
+BOB_DATA_PATH = 'input/bob.txt'
+
 
 def read_input(path):
     """
@@ -14,13 +17,13 @@ def read_input(path):
     return input_data
 
 
-def verify_output(result, alice_data_path, bob_data_path):
+def verify_output(result):
     """
     TODO
     """
-    alice_data = read_input(alice_data_path)
-    bob_data = read_input(bob_data_path)
-    if (sum(alice_data) + sum(bob_data)) == result:
+    sender_data = read_input(ALICE_DATA_PATH)
+    receiver_data = read_input(BOB_DATA_PATH)
+    if (sum(sender_data) + sum(receiver_data)) == result:
         print(f'The sum is correct and it is {result}.')
     else:
         print(f'The sum is {result} and it is incorrect.')

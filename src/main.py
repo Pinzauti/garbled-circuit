@@ -3,10 +3,7 @@ TODO
 """
 import argparse
 from yao.garbler import Alice, Bob, LocalTest
-from utils import read_input, verify_output
-
-ALICE_DATA_PATH = 'input/alice.txt'
-BOB_DATA_PATH = 'input/bob.txt'
+from utils import read_input, verify_output, ALICE_DATA_PATH, BOB_DATA_PATH
 
 
 class Receiver(Bob):
@@ -71,7 +68,7 @@ class Sender(Alice):
         result = self.ot.get_result(a_inputs, b_keys)
         str_result = ''.join([str(result[w]) for w in outputs])
         print(f'The sum of Alice is {sum(self.data_alice)}')
-        verify_output(int(str_result, 2), ALICE_DATA_PATH, BOB_DATA_PATH)
+        verify_output(int(str_result, 2))
 
 
 def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
