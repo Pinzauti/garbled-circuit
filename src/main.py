@@ -11,16 +11,20 @@ def read_input(path):
     """
     with open(path, "r", encoding="utf-8") as file:
         input_data = list(map(int, file.readline().split()))
+    if sum(input_data) > 255:
+        raise Exception('The sum can not exceed the maximum value stored in 8 bit.')
     return input_data
 
 
-def verify_output(sender_data, receiver_data, result):
+def verify_output(sender_data, result):
     """
     TODO
     """
-    if (int(sender_data) + int(receiver_data)) == result:
-        return "The sum is correct"
-    return "The sum was incorrect"
+    receiver_data = read_input('input/bob.txt')
+    if (int(sender_data) + int(sum(receiver_data))) == result:
+        print(f'The sum is correct and it is {result}.')
+    else:
+        print(f'The sum is {result} and it is incorrect.')
 
 
 class Receiver(Bob):
@@ -41,6 +45,7 @@ class Receiver(Bob):
         b_wires = circuit.get("bob", [])
 
         print(f"Received {circuit['id']}")
+        print(f'The sum of Bob is {sum(self.data_receiver)}')
         bits_b = list(f"{sum(self.data_receiver):b}".zfill(8))
         bits_b = [int(i) for i in bits_b]
 
@@ -58,10 +63,9 @@ class Sender(Alice):
     TODO
     """
 
-    def __init__(self, data_sender, data_receiver, circuits):
+    def __init__(self, data_sender, circuits):
         super().__init__(circuits)
         self.data_sender = read_input(data_sender)
-        self.data_receiver = read_input(data_receiver)
 
     def print(self, entry):
         """
@@ -84,10 +88,8 @@ class Sender(Alice):
                                     pbits[a_wires[i]] ^ bits_a[i])
         result = self.ot.get_result(a_inputs, b_keys)
         str_result = ''.join([str(result[w]) for w in outputs])
-        print(f'The sum of Alice is {sum(self.data_sender)} '
-              f'and the sum of Bob is {sum(self.data_receiver)}.')
-        print(f'{verify_output(sum(self.data_sender), sum(self.data_receiver), int(str_result, 2))}'
-              f' and it is {int(str_result, 2)}')
+        print(f'The sum of Alice is {sum(self.data_sender)}')
+        verify_output(sum(self.data_sender), int(str_result, 2))
 
 
 def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
@@ -96,7 +98,7 @@ def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
     """
     logging.getLogger().setLevel(logging.WARNING)
     if party == 'alice':
-        alice = Sender("input/alice.txt", "input/bob.txt", circuit_path)
+        alice = Sender("input/alice.txt", circuit_path)
         alice.start()
     elif party == 'bob':
         bob = Receiver('input/bob.txt')
