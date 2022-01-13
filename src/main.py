@@ -14,6 +14,15 @@ def read_input(path):
     return input_data
 
 
+def verify_output(sender_data, receiver_data, result):
+    """
+    TODO
+    """
+    if (int(sender_data) + int(receiver_data)) == result:
+        return "The sum is correct"
+    return "The sum was incorrect"
+
+
 class Receiver(Bob):
     """
     TODO
@@ -32,11 +41,8 @@ class Receiver(Bob):
         b_wires = circuit.get("bob", [])
 
         print(f"Received {circuit['id']}")
-        print(self.data_receiver)
-        print(sum(self.data_receiver))
         bits_b = list(f"{sum(self.data_receiver):b}".zfill(8))
         bits_b = [int(i) for i in bits_b]
-        print(bits_b)
 
         b_inputs_clear = {
             b_wires[i]: bits_b[i]
@@ -76,10 +82,8 @@ class Sender(Alice):
         bits_a = list(f"{sum(self.data_sender):b}".zfill(8))
         bits_a = [int(i) for i in bits_a]
 
-        bits = format(sum(self.data_sender), 'b').zfill(len(a_wires))
-
         # Map Alice's wires to (key, encr_bit)
-        for i in range(len(a_wires)):
+        for i, _ in enumerate(a_wires):
             a_inputs[a_wires[i]] = (keys[a_wires[i]][bits_a[i]],
                                     pbits[a_wires[i]] ^ bits_a[i])
 
@@ -87,15 +91,12 @@ class Sender(Alice):
         result = self.ot.get_result(a_inputs, b_keys)
 
         # Format output
-        str_bits_a = ' '.join(bits[:len(a_wires)])
-        str_bits_b = ' '.join(bits[len(a_wires):])
-        str_result = ' '.join([str(result[w]) for w in outputs])
+        str_result = ''.join([str(result[w]) for w in outputs])
 
-        print(f"  Alice{a_wires} = {str_bits_a} "
-              f"Bob{b_wires} = {str_bits_b}  "
-              f"Outputs{outputs} = {str_result}")
-        print()
-
+        print(f'The sum of Alice is {sum(self.data_sender)} '
+              f'and the sum of Bob is {sum(self.data_receiver)}.')
+        print(f'{verify_output(sum(self.data_sender), sum(self.data_receiver), int(str_result, 2))}'
+              f' and it is {int(str_result, 2)}')
 
 
 def main(
@@ -135,7 +136,7 @@ def init():
 
     parser = argparse.ArgumentParser(description="Run Yao protocol.")
     parser.add_argument("party",
-                        choices=["alice", "bob", "local."],
+                        choices=["alice", "bob", "local"],
                         help="The yao party to run")
     parser.add_argument(
         "-m",
