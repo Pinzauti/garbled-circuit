@@ -96,18 +96,12 @@ def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
     """
     TODO
     """
-    logging.getLogger().setLevel(logging.WARNING)
     if party == 'alice':
-        alice = Sender("input/alice.txt", circuit_path)
-        alice.start()
+        Sender("input/alice.txt", circuit_path).start()
     elif party == 'bob':
-        bob = Receiver('input/bob.txt')
-        bob.listen()
+        Receiver('input/bob.txt').listen()
     elif party == "local":
-        local = LocalTest(circuit_path, print_mode=print_mode)
-        local.start()
-    else:
-        logging.error(f"Unknown party '{party}'")
+        LocalTest(circuit_path, print_mode=print_mode).start()
 
 
 def init():
