@@ -90,7 +90,7 @@ def init():
     parser = argparse.ArgumentParser(description="Run Yao protocol.")
     parser.add_argument("party",
                         choices=["alice", "bob", "table"],
-                        help="The yao party to run")
+                        help="The yao party to run.")
     main(party=parser.parse_args().party)
 
 
