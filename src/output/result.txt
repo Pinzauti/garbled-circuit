@@ -1,5 +1,1 @@
-Bob's input set sum is 81
-Bob's message for Alice is 100100010
-Alice's input set sum is 27
-Alice's message for Bob is 001101100
-The sum is correct and it is 108.
+
