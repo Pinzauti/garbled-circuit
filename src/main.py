@@ -79,7 +79,7 @@ def main(party, circuit_path='circuit/add.json'):
         Sender(circuit_path).start()
     elif party == 'bob':
         Receiver().listen()
-    elif party == "local":
+    elif party == "table":
         LocalTest(circuit_path, print_mode='table').start()
 
 
@@ -89,7 +89,7 @@ def init():
     """
     parser = argparse.ArgumentParser(description="Run Yao protocol.")
     parser.add_argument("party",
-                        choices=["alice", "bob", "local"],
+                        choices=["alice", "bob", "table"],
                         help="The yao party to run")
     main(party=parser.parse_args().party)
 
