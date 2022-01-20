@@ -30,8 +30,8 @@ class Receiver(Bob):
         }
         print(f"Received {circuit['id']}")
         write_to_file(clear=True)
-        write_to_file(f'Bob\'s input set sum is {sum(self.data_bob)}\n')
-        write_to_file(f'Bob\'s message for Alice is {"".join(map(str, pbits_out.values()))}\n')
+        write_to_file(f'Bob\'s input set sum is {sum(self.data_bob)}\n'
+                      f'Bob\'s message for Alice is {"".join(map(str, pbits_out.values()))}\n')
         self.ot.send_result(circuit, garbled_tables, pbits_out,
                             b_inputs_clear)
 
@@ -65,8 +65,8 @@ class Sender(Alice):
                                     pbits[a_wires[i]] ^ bits_a[i])
         result = self.ot.get_result(a_inputs, b_keys)
         str_result = ''.join([str(result[w]) for w in outputs])
-        write_to_file(f'Alice\'s input set sum is {sum(self.data_alice)}\n')
-        write_to_file(f'Alice\'s message for Bob is {str_result}\n')
+        write_to_file(f'Alice\'s input set sum is {sum(self.data_alice)}\n'
+                      f'Alice\'s message for Bob is {str_result}\n')
         verify_output(int(str_result, 2))
         print('Communication completed, all the information are in the file.')
 
