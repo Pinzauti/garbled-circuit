@@ -17,6 +17,17 @@ def read_input(path):
     return input_data
 
 
+def write_to_file(message='', clear=False):
+    """
+    TODO
+    """
+    path = 'output/result.txt'
+    with open(path, 'a', encoding='UTF-8') as file:
+        file.write(message)
+        if clear:
+            file.truncate(0)
+
+
 def verify_output(result):
     """
     TODO
@@ -24,6 +35,6 @@ def verify_output(result):
     sender_data = read_input(ALICE_DATA_PATH)
     receiver_data = read_input(BOB_DATA_PATH)
     if (sum(sender_data) + sum(receiver_data)) == result:
-        print(f'The sum is correct and it is {result}.')
+        write_to_file(f'The sum is correct and it is {result}.')
     else:
-        print(f'The sum is {result} and it is incorrect.')
+        write_to_file('The sum is {result} and it is incorrect.')
