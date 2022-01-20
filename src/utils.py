@@ -21,11 +21,11 @@ def write_to_file(message='', clear=False):
     """
     TODO
     """
-    path = 'output/result.txt'
-    with open(path, 'a', encoding='UTF-8') as file:
-        file.write(message)
+    with open('output/result.txt', 'a', encoding='UTF-8') as file:
         if clear:
             file.truncate(0)
+        else:
+            file.write(message)
 
 
 def verify_output(result):
