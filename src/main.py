@@ -71,7 +71,7 @@ class Sender(Alice):
         verify_output(int(str_result, 2))
 
 
-def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
+def main(party, circuit_path='circuit/add.json'):
     """
     TODO
     """
@@ -80,7 +80,7 @@ def main(party, circuit_path='circuit/add.json', print_mode='circuit'):
     elif party == 'bob':
         Receiver().listen()
     elif party == "local":
-        LocalTest(circuit_path, print_mode=print_mode).start()
+        LocalTest(circuit_path, print_mode='table').start()
 
 
 def init():
@@ -91,16 +91,7 @@ def init():
     parser.add_argument("party",
                         choices=["alice", "bob", "local"],
                         help="The yao party to run")
-    parser.add_argument(
-        "-m",
-        metavar="mode",
-        choices=["circuit", "table"],
-        default="circuit",
-        help="The print mode for local tests (default 'circuit').")
-    main(
-        party=parser.parse_args().party,
-        print_mode=parser.parse_args().m,
-    )
+    main(party=parser.parse_args().party)
 
 
 init()

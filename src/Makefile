@@ -1,6 +1,6 @@
 ALICE = python main.py alice
 BOB = python main.py bob
-LOCAL = python main.py local
+TABLE = python main.py local
 
 default:
 	@echo Hi, you can execute make bob in order to start the server.
@@ -15,5 +15,5 @@ alice:
 bob:
 	${BOB}
 
-local:
-	${LOCAL}
+table:
+	${TABLE}
