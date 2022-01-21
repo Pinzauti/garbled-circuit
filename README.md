@@ -94,6 +94,7 @@ all the required packages have to be installed, in order to do this
 execute the command[^1]:
 
 ```
+cd src/
 pip install -r requirements.txt
 ```
 
