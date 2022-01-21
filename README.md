@@ -1,13 +1,13 @@
 [![Pylint](https://github.com/Pinzauti/garbled-circuit/actions/workflows/pylint.yml/badge.svg)](https://github.com/Pinzauti/garbled-circuit/actions/workflows/pylint.yml)
 [![CodeQL](https://github.com/Pinzauti/garbled-circuit/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Pinzauti/garbled-circuit/actions/workflows/codeql-analysis.yml)
-[![BCH compliance](https://bettercodehub.com/edge/badge/Pinzauti/garbled-circuit?branch=main)](https://bettercodehub.com
+[![BCH compliance](https://bettercodehub.com/edge/badge/Pinzauti/garbled-circuit?branch=main)](https://bettercodehub.com)
 
 # Garbled Circuit
 
 The purpose of this project is to develop a Yao's protocol[^fn3]
 implementation. The function used is the sum which is performed on 8
 bits number, using the circuit in
-figure [1](#circuit){reference-type="ref" reference="circuit"}. Alice
+figure [1]. Alice
 and Bob have two sets of numbers (given by the user), they compute the
 sum of this set on their own. Then they execute the secure sum of their
 set's sum using Yao's protocol.
@@ -20,9 +20,17 @@ The circuit used in this project is composed of an half adder and seven
 full adders in series[^fn2].
 
 
-![Circuit used](images/8-bit-full-adder.png){#circuit width="100%"}
-![Full adder](images/full-adder.png){#circuit width="100%"}
-![Half adder](images/half-adder.png){#circuit width="100%"}
+| <img src="images/8-bit-full-adder.png" width="2000"> |
+|:--:|
+| <b>Circuit used</b>|
+
+| <img src="images/full-adder.png" width="2000"> |
+|:--:|
+| <b>Full adder</b>|
+
+| <img src="images/half-adder.png" width="2000">|
+|:--:|
+| <b>Half adder</b>|
 
 ## Architecture
 
